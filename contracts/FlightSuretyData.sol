@@ -47,9 +47,9 @@ contract FlightSuretyData {
      * @dev Constructor
      *      The deploying account becomes contractOwner
      */
-    constructor() public payable {
+    constructor(address dataContract) public payable {
         contractOwner = msg.sender;
-        registerFirstAirline(msg.sender);
+        registerFirstAirline(dataContract);
     }
 
     /********************************************************************************************/
