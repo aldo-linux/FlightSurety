@@ -9,6 +9,13 @@ src/server/config.json
 /dapp/
 prod/
 
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
 # Runtime data
 pids
 *.pid
