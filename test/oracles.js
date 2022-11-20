@@ -24,6 +24,7 @@ contract('Oracles', async (accounts) => {
     
     // ARRANGE
     let fee = await config.flightSuretyApp.REGISTRATION_FEE.call();
+    console.log(`>>> Registration Fee = ${fee}`);
 
     // ACT
     for(let a=1; a<TEST_ORACLES_COUNT; a++) {      
