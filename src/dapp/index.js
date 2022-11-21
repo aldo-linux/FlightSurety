@@ -231,7 +231,7 @@ function displayFlightInfo(num, flight) {
     displayDiv.innerHTML = "";
     let section = DOM.section();
     
-    let line1 = "Airlines: " + flight[0][6] + " Departs at: " + flight[0][3];
+    let line1 = "Airline: " + flight[0][6] + " Departs at: " + flight[0][3];
     let line2 = "Departs From: " + flight[0][4] + " Lands at: " + flight[0][5];
     
     section.appendChild(DOM.div({className: 'col-sm-4 field', style: { margin: 'auto 0 auto 0'}}, line1));

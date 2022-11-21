@@ -10,6 +10,8 @@ web3.eth.defaultAccount = web3.eth.accounts[0];
 let flightSuretyApp = new web3.eth.Contract(FlightSuretyApp.abi, config.appAddress);
 let flightSuretyData = new web3.eth.Contract(FlightSuretyData.abi, config.dataAddress);
 
+let registeredOracles = [];
+
 //Get Oracle accounts
 web3.eth.getAccounts( async (error, accounts) => {
   
@@ -20,47 +22,29 @@ web3.eth.getAccounts( async (error, accounts) => {
       if(error) {
         console.log(error);
       } else {
-        console.log("Set Authorized caller.");
+        console.log(`Set Authorized caller with address=${config.appAddress} from address=${accounts[0]}`);
       }
     });
 
-  //Get registration fee from app
-  /*
-  flightSuretyApp.methods.REGISTRATION_FEE().call({ from: accounts[0] }, async (error, result) => {
-    if(error){
-      console.log(error);
-    }else{
-      let regFee = result.toString();
-            
-      //Register 20 oracles
-      let oracle = [];
-      let indexes = [];
-      for(var i = 10; i < 40; i++){
-        let accountOra = accounts[i];
-        await flightSuretyApp.methods
-          .registerOracle().send({ from: accountOra, value: regFee, gas:3000000}, async (error, result2) => {
-            if(error){
-              console.log(error);
-            }else{
-              await flightSuretyApp.methods
-                .getMyIndexes()
-                .call({ from: accountOra }, (error, result3) => {
-                  if(error){
-                    console.log(error);
-                  }else{
-                    indexes = result3;
-                    oracle.push(accountOra);
-                    oracle.push(indexes);
-                    registeredOracles.push(oracle);
-                    //console.log ("Oracle : " + oracle);
-                    oracle = [];
-                  }
-              }); 
-            }
-        });
-      }
-    }*/
+  //ARRANGE - Get registration fee from app
+  let fee = await flightSuretyApp.methods.REGISTRATION_FEE().call();
+  console.log(`Registration fee=${fee}`);
 
+  // ACT
+  // Register 20 Oracles
+  let oracle = [];
+  let indexes = [];
+  for(var i = 10; i < 30; i++){
+    let oracleAccount = accounts[i];
+    let registeredOracle = await flightSuretyApp.methods.registerOracle().send({ from: oracleAccount, value: fee.toString(), gas:3000000});
+    indexes = await flightSuretyApp.methods.getMyIndexes().call({ from: oracleAccount });
+    oracle.push(registeredOracle);
+    oracle.push(indexes);
+    registeredOracles.push(oracle);
+    //console.log ("Oracle : " + oracle);
+    oracle = [];
+    console.log(`Registered Oracle Account ${i} = ${oracleAccount}. result=${JSON.stringify(registeredOracle)}`);
+  }
   });
 
 
@@ -107,7 +91,7 @@ async function submitResponse(index, airline, flight, time, statusCode, oracle) 
           //console.log(error);
         } else {
           console.log(result);
-          console.log("Sent Oracle Response for " + oracle + " Status Code: " + statusCode);
+          console.log(`Sent Oracle Response for ${oracle} Status Code = ${statusCode}`);
         }
       });
   } catch (e) {

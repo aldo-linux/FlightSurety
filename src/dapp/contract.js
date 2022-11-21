@@ -27,10 +27,10 @@ export default class Contract {
             let counter = 0;
             let flight= [];
             let airline = [];
-            let tempAirline = ['United', 'American', 'Lufthansa', 'Southwest', 'Delta'];
-            let tempFlight = ['UA144', 'AA222', 'DT026', '9W76', 'EK112'];
-            let tempFlightOrigin = ['EWR', 'ORD', 'MUC', 'STL', 'BOS'];
-            let tempFlightDest = ['LHR', 'LAX', 'JFK', 'SEA', 'PHL'];
+            let tempAirline = ['United', 'Aeromexico', 'Lufthansa', 'Qatar Airways', 'Air Canada'];
+            let tempFlight = ['UA144', 'AM8', 'DT026', 'QTR1', 'ACA1091'];
+            let tempFlightOrigin = ['EWR', 'MEX', 'MUC', 'DOH', 'CYYZ'];
+            let tempFlightDest = ['LHR', 'LHR', 'JFK', 'MAD', 'CYVR'];
             let tempFlightTime = ['7:00 AM', '2:12 PM', '8:30 PM', '9:15 AM', '6:08 AM']
             let time = 0;
             
@@ -46,7 +46,7 @@ export default class Contract {
                 flight.push(tempAirline[counter]); //airline name 
 
                 //Create airlines array
-                airlines.push(accts[counter + 1]);
+                airline.push(accts[counter + 1]);
                 airline.push(tempAirline[counter]); //airline name
                 airline.push(false); //funding status
 
@@ -269,16 +269,6 @@ export default class Contract {
 
     async withdraw(passenger, callback){
         let self = this;
-
-        /* await self.flightSuretyData.methods
-            .testFunction2(passenger)
-            .call({from: self.owner}, (error, result) => {
-                if(error){
-                    console.log(error);
-                }else {
-                    callback(result);
-                }
-            }); */
 
          await self.flightSuretyApp.methods
             .withdrawPayout()
